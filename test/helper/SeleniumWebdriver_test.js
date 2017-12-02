@@ -1,7 +1,7 @@
 'use strict';
 let TestHelper = require('../support/TestHelper');
 
-let SeleniumWebdriver = require('../../lib/helper/SeleniumWebdriver');
+let Protractor = require('../../lib/helper/Protractor');
 let should = require('chai').should();
 let I, browser;
 let site_url = TestHelper.siteUrl();
@@ -24,7 +24,7 @@ describe('SeleniumWebdriver', function () {
       fs.unlinkSync(dataFile);
     } catch (err) {}
 
-    I = new SeleniumWebdriver({
+    I = new Protractor({
       url: site_url,
       browser: 'chrome',
       windowSize: '500x700',
@@ -34,6 +34,7 @@ describe('SeleniumWebdriver', function () {
     return I._init().then(() => {
       return I._beforeSuite().then(() => {
         browser = I.browser;
+        return I.amOutsideAngularApp();
       });
     });
   });
@@ -85,7 +86,7 @@ describe('SeleniumWebdriver', function () {
     it('should fail when text is not on site', () => {
       return I.amOnPage('/')
         .then(() => I.see('Something incredible!'))
-        .thenCatch((e) => {
+        .catch((e) => {
           e.should.be.instanceOf(AssertionFailedError);
           e.inspect().should.include('web application');
         })
@@ -94,7 +95,7 @@ describe('SeleniumWebdriver', function () {
     it('should fail when text on site', () => {
       return I.amOnPage('/')
         .then(() => I.dontSee('Welcome'))
-        .thenCatch((e) => {
+        .catch((e) => {
           e.should.be.instanceOf(AssertionFailedError);
           e.inspect().should.include('web application');
         });
@@ -103,7 +104,7 @@ describe('SeleniumWebdriver', function () {
     it('should fail when test is not in context', () => {
       return I.amOnPage('/')
         .then(() => I.see('debug', {css: 'a'}))
-        .thenCatch((e) => {
+        .catch((e) => {
           e.should.be.instanceOf(AssertionFailedError);
           e.toString().should.not.include('web page');
           e.inspect().should.include("expected element {css: 'a'}");

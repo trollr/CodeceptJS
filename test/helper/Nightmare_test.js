@@ -30,7 +30,7 @@ describe('Nightmare', function () {
       show: false
     });
     I._init();
-    I._beforeSuite();
+    return I._beforeSuite();
   });
 
   beforeEach(function() {

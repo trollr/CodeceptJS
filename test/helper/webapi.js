@@ -166,6 +166,7 @@ module.exports.tests = function() {
       yield I.amOnPage('/form/checkbox');
       yield I.checkOption('#checkin');
       yield I.click('Submit');
+      yield I.wait(1);
       return assert.equal(formContents('terms'), 'agree');
     });
 
@@ -508,7 +509,7 @@ module.exports.tests = function() {
         .then(() => assert.ok(fileExists(path.join(global.output_dir, `screenshot_full_${+sec}`)), null, 'file does not exists'));
     });
 
-    it('should create a screenshot on fail  @ups', () => {
+    it('should create a screenshot on fail @ups', () => {
       let sec = (new Date()).getUTCMilliseconds().toString();
       let test = { title: 'sw should do smth ' + sec };
       return I.amOnPage('/')
@@ -560,7 +561,7 @@ module.exports.tests = function() {
     });
   });
 
-  describe('#waitForElement', () => {
+  describe('#waitForElement @ups', () => {
     it('should wait for visible element', () => {
       return I.amOnPage('/form/wait_visible')
         .then(() => I.dontSee('Step One Button'))
@@ -590,23 +591,23 @@ module.exports.tests = function() {
 
 
   });
-  
+
   describe('#waitUntilExists', () => {
-   
+
     it('should wait for an element to be removed from DOM', () => {
       return I.amOnPage('/spinner')
         .then(() => I.seeElementInDOM('.loader'))
         .then(() => I.waitUntilExists('.loader'))
         .then(() => I.dontSeeElement('.loader'))
     });
-  
+
     it('should wait for a non-exising element to be removed from DOM', () => {
       return I.amOnPage('/spinner')
         .then(() => I.dontSeeElement('.non-existing-class'))
         .then(() => I.waitUntilExists('.non-existing-class'))
         .then(() => I.dontSeeElement('.non-existing-class'))
     });
-  
+
   });
 
   describe('within tests', () => {
